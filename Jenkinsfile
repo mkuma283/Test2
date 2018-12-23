@@ -1,28 +1,39 @@
 pipeline {
-    agent any 
+    agent any
+    parameters {
+    gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
+  }
     stages {
+        stage('Example')
+        {
+            steps{
+             git branch: "${params.BRANCH}", url: 'https://github.com/mkuma283/Test2.git'
+            }
+        }
         stage('clone repo and clean') { 
             steps {
-                deleteDir()
-                bat "git clone https://github.com/mkuma283/Test2.git"
-                bat 'C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe "C:\\Program Files (x86)\\Jenkins\\workspace\\Test\\Test2\\TestProject.sln"'
-                
-                
-
-            }
+                bat 'C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe "TestProject.sln"'
+                cleanWs()
+                bat "rmdir C:\\Users\\mkuma283\\Desktop\\test /s /q"
+               bat "mkdir C:\\Users\\mkuma283\\Desktop\\test"
+                bat("xcopy C:\\Users\\mkuma283\\Test2 C:\\Users\\mkuma283\\Desktop\\test /S /Q /Y /O /X /E /H /K")
+       }
         }
-        
- stage('Test') { 
-            steps {
-                bat "mvn test -f TestProject" 
-            }
-        }
-        stage('Deploy') { 
-            steps {
-                bat "mvn package -f TestProject" 
-            }
-        }
-       
     }
-
+     post {
+      always {
+          script {
+              if (currentBuild.result == null) {
+                  currentBuild.result = 'SUCCESS'    
+              }
+          }    
+          step([$class: 'Mailer',
+            notifyEveryUnstableBuild: true,
+            recipients: "manisha_kumari28@optum.com",
+            sendToIndividuals: true])
+            
+      }
+  }
+   
 }
+
