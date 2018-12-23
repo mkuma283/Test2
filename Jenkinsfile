@@ -4,13 +4,13 @@ pipeline {
     gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
   }
     stages {
-        stage('Example')
+        stage('Branch Selector')
         {
             steps{
              git branch: "${params.BRANCH}", url: 'https://github.com/mkuma283/Test2.git'
             }
         }
-        stage('clone repo and clean') { 
+        stage('clone repo, build, clean workspace, copy files from 1 loc 2 another') { 
             steps {
                 bat 'C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe "TestProject.sln"'
                 cleanWs()
