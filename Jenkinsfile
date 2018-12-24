@@ -14,9 +14,10 @@ pipeline {
             steps {
                 bat 'C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe "TestProject.sln"'
                 cleanWs()
-                bat "rmdir C:\\Users\\mkuma283\\Desktop\\test /s /q"
-               bat "mkdir C:\\Users\\mkuma283\\Desktop\\test"
-                bat("xcopy C:\\Users\\mkuma283\\Test2 C:\\Users\\mkuma283\\Desktop\\test /S /Q /Y /O /X /E /H /K")
+                
+               // bat "rmdir C:\\Users\\mkuma283\\Desktop\\test /s /q"
+              // bat "mkdir C:\\Users\\mkuma283\\Desktop\\test"
+              //  bat("xcopy C:\\Users\\mkuma283\\Test2 C:\\Users\\mkuma283\\Desktop\\test /S /Q /Y /O /X /E /H /K")
        }
         }
     }
